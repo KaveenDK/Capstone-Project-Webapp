@@ -8,23 +8,21 @@ import type {
   EnrollmentFormData,
 } from "@/types";
 
-const API_GATEWAY = process.env.NEXT_PUBLIC_API_GATEWAY_URL || "http://localhost:7000";
-
 const api = axios.create({
-  baseURL: API_GATEWAY,
+  baseURL: "/api/v1",
   headers: { "Content-Type": "application/json" },
 });
 
-// ─── Student API ───────────────────────────────────────────────────────────────
+// "?"?"? Student API "?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?
 
 export const studentApi = {
   getAll: async (): Promise<Student[]> => {
-    const { data } = await api.get("/api/v1/students");
+    const { data } = await api.get("/students");
     return data;
   },
 
   getById: async (nic: string): Promise<Student> => {
-    const { data } = await api.get(`/api/v1/students/${nic}`);
+    const { data } = await api.get(/students/ + nic);
     return data;
   },
 
@@ -37,7 +35,7 @@ export const studentApi = {
     if (formData.email) form.append("email", formData.email);
     if (formData.picture) form.append("picture", formData.picture);
 
-    const { data } = await api.post("/api/v1/students", form, {
+    const { data } = await api.post("/students", form, {
       headers: { "Content-Type": "multipart/form-data" },
     });
     return data;
@@ -51,79 +49,79 @@ export const studentApi = {
     if (formData.email) form.append("email", formData.email);
     if (formData.picture) form.append("picture", formData.picture);
 
-    const { data } = await api.put(`/api/v1/students/${nic}`, form, {
+    const { data } = await api.put(/students/ + nic, form, {
       headers: { "Content-Type": "multipart/form-data" },
     });
     return data;
   },
 
   delete: async (nic: string): Promise<void> => {
-    await api.delete(`/api/v1/students/${nic}`);
+    await api.delete(/students/ + nic);
   },
 
   getPictureUrl: (nic: string): string =>
-    `${API_GATEWAY}/api/v1/students/${nic}/picture`,
+    /api/v1/students/ + nic + /picture,
 };
 
-// ─── Program API ───────────────────────────────────────────────────────────────
+// "?"?"? Program API "?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?
 
 export const programApi = {
   getAll: async (): Promise<Program[]> => {
-    const { data } = await api.get("/api/v1/programs");
+    const { data } = await api.get("/programs");
     return data;
   },
 
   getById: async (programId: string): Promise<Program> => {
-    const { data } = await api.get(`/api/v1/programs/${programId}`);
+    const { data } = await api.get(/programs/ + programId);
     return data;
   },
 
   create: async (body: ProgramFormData): Promise<Program> => {
-    const { data } = await api.post("/api/v1/programs", body);
+    const { data } = await api.post("/programs", body);
     return data;
   },
 
   update: async (programId: string, body: ProgramFormData): Promise<Program> => {
-    const { data } = await api.put(`/api/v1/programs/${programId}`, body);
+    const { data } = await api.put(/programs/ + programId, body);
     return data;
   },
 
   delete: async (programId: string): Promise<void> => {
-    await api.delete(`/api/v1/programs/${programId}`);
+    await api.delete(/programs/ + programId);
   },
 };
 
-// ─── Enrollment API ────────────────────────────────────────────────────────────
+// "?"?"? Enrollment API "?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?
 
 export const enrollmentApi = {
   getAll: async (): Promise<Enrollment[]> => {
-    const { data } = await api.get("/api/v1/enrollments");
+    const { data } = await api.get("/enrollments");
     return data;
   },
 
   getById: async (id: number): Promise<Enrollment> => {
-    const { data } = await api.get(`/api/v1/enrollments/${id}`);
+    const { data } = await api.get(/enrollments/ + id);
     return data;
   },
 
   getByProgram: async (programId: string): Promise<Enrollment[]> => {
-    const { data } = await api.get("/api/v1/enrollments", {
+    const { data } = await api.get("/enrollments", {
       params: { programId },
     });
     return data;
   },
 
   create: async (body: EnrollmentFormData): Promise<Enrollment> => {
-    const { data } = await api.post("/api/v1/enrollments", body);
+    const { data } = await api.post("/enrollments", body);
     return data;
   },
 
   update: async (id: number, body: EnrollmentFormData): Promise<Enrollment> => {
-    const { data } = await api.put(`/api/v1/enrollments/${id}`, body);
+    const { data } = await api.put(/enrollments/ + id, body);
     return data;
   },
 
   delete: async (id: number): Promise<void> => {
-    await api.delete(`/api/v1/enrollments/${id}`);
+    await api.delete(/enrollments/ + id);
   },
 };
