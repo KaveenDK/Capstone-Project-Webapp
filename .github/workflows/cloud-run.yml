@@ -1,4 +1,4 @@
-name: Deploy Frontend to Cloud Run
+﻿name: Deploy Frontend to Cloud Run
 
 on:
   push:
@@ -29,11 +29,12 @@ jobs:
 
       - name: Build and Push Docker Image
         run: |
-          gcloud builds submit --tag us-central1-docker.pkg.dev/project-46ec948e-0d3d-4923-927/eca-containers/frontend:${{ github.sha }}
+          gcloud builds submit --tag us-central1-docker.pkg.dev/project-46ec948e-0d3d-4923-927/eca-containers/frontend:${{ github.sha }} .
 
       - name: Deploy to Cloud Run
         run: |
           gcloud run deploy eca-frontend \
             --image us-central1-docker.pkg.dev/project-46ec948e-0d3d-4923-927/eca-containers/frontend:${{ github.sha }} \
             --region us-central1 \
-            --allow-unauthenticated
+            --allow-unauthenticated \
+            --port 3000
