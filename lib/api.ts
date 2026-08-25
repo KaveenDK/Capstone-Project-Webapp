@@ -13,7 +13,7 @@ const api = axios.create({
   headers: { "Content-Type": "application/json" },
 });
 
-// "?"?"? Student API "?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?
+// Student API
 
 export const studentApi = {
   getAll: async (): Promise<Student[]> => {
@@ -22,7 +22,7 @@ export const studentApi = {
   },
 
   getById: async (nic: string): Promise<Student> => {
-    const { data } = await api.get(/students/ + nic);
+    const { data } = await api.get(`/students/${nic}`);
     return data;
   },
 
@@ -49,21 +49,21 @@ export const studentApi = {
     if (formData.email) form.append("email", formData.email);
     if (formData.picture) form.append("picture", formData.picture);
 
-    const { data } = await api.put(/students/ + nic, form, {
+    const { data } = await api.put(`/students/${nic}`, form, {
       headers: { "Content-Type": "multipart/form-data" },
     });
     return data;
   },
 
   delete: async (nic: string): Promise<void> => {
-    await api.delete(/students/ + nic);
+    await api.delete(`/students/${nic}`);
   },
 
   getPictureUrl: (nic: string): string =>
-    /api/v1/students/ + nic + /picture,
+    `/api/v1/students/${nic}/picture`,
 };
 
-// "?"?"? Program API "?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?
+// Program API
 
 export const programApi = {
   getAll: async (): Promise<Program[]> => {
@@ -72,7 +72,7 @@ export const programApi = {
   },
 
   getById: async (programId: string): Promise<Program> => {
-    const { data } = await api.get(/programs/ + programId);
+    const { data } = await api.get(`/programs/${programId}`);
     return data;
   },
 
@@ -82,16 +82,16 @@ export const programApi = {
   },
 
   update: async (programId: string, body: ProgramFormData): Promise<Program> => {
-    const { data } = await api.put(/programs/ + programId, body);
+    const { data } = await api.put(`/programs/${programId}`, body);
     return data;
   },
 
   delete: async (programId: string): Promise<void> => {
-    await api.delete(/programs/ + programId);
+    await api.delete(`/programs/${programId}`);
   },
 };
 
-// "?"?"? Enrollment API "?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?"?
+// Enrollment API
 
 export const enrollmentApi = {
   getAll: async (): Promise<Enrollment[]> => {
@@ -100,7 +100,7 @@ export const enrollmentApi = {
   },
 
   getById: async (id: number): Promise<Enrollment> => {
-    const { data } = await api.get(/enrollments/ + id);
+    const { data } = await api.get(`/enrollments/${id}`);
     return data;
   },
 
@@ -117,11 +117,11 @@ export const enrollmentApi = {
   },
 
   update: async (id: number, body: EnrollmentFormData): Promise<Enrollment> => {
-    const { data } = await api.put(/enrollments/ + id, body);
+    const { data } = await api.put(`/enrollments/${id}`, body);
     return data;
   },
 
   delete: async (id: number): Promise<void> => {
-    await api.delete(/enrollments/ + id);
+    await api.delete(`/enrollments/${id}`);
   },
 };
