@@ -1,40 +1,40 @@
 ﻿name: Deploy Frontend to Cloud Run
-
 on:
   push:
     branches:
       - main
-
+env:
+  PROJECT_ID: project-46ec948e-0d3d-4923-927
+  REGION: us-central1
+  SERVICE: eca-frontend
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     permissions:
       contents: 'read'
       id-token: 'write'
-
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
-
       - name: Google Auth
         id: auth
         uses: google-github-actions/auth@v2
         with:
           workload_identity_provider: 'projects/262307671967/locations/global/workloadIdentityPools/eca-github-pool/providers/github-provider'
           service_account: 'github-wif-reader@project-46ec948e-0d3d-4923-927.iam.gserviceaccount.com'
-
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
-
       - name: Build and Push Docker Image
         run: |
-          gcloud builds submit --tag us-central1-docker.pkg.dev/project-46ec948e-0d3d-4923-927/eca-containers/frontend:${{ github.sha }} .
-
+          IMAGE_NAME="us-central1-docker.pkg.dev/${PROJECT_ID}/eca-containers/frontend:${{ github.sha }}"
+          gcloud builds submit --tag $IMAGE_NAME .
       - name: Deploy to Cloud Run
         run: |
-          gcloud run deploy eca-frontend \
-            --image us-central1-docker.pkg.dev/project-46ec948e-0d3d-4923-927/eca-containers/frontend:${{ github.sha }} \
-            --region us-central1 \
-            --allow-unauthenticated \
-            --port 3000
+          IMAGE_NAME="us-central1-docker.pkg.dev/${PROJECT_ID}/eca-containers/frontend:${{ github.sha }}"
+          gcloud run deploy ${{ env.SERVICE }} \
+            --region ${{ env.REGION }} \
+            --image $IMAGE_NAME \
+            --platform managed \
+            --port 8080 \
+            --ingress internal-and-cloud-load-balancing \
+            --allow-unauthenticated
